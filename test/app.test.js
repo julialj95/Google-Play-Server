@@ -74,7 +74,18 @@ describe("GET /apps", () => {
         expect(sorted).to.be.true;
       });
   });
-  // it("should sort apps by genre", () => {
-  //   return supertest(app).get("/books").query({ genres });
-  // });
+  it.only("should filter apps by genre", () => {
+    const genres = "Action";
+    return supertest(app)
+      .get("/apps")
+      .query({ genres })
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .then((res) => {
+        const returnedArray = res.body.filter(
+          (item) => !item.Genres.includes(genres)
+        );
+        expect(returnedArray).to.have.lengthOf(0);
+      });
+  });
 });
